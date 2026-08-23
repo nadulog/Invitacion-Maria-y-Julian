@@ -1,0 +1,1041 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#eee3d0" />
+    <title>María & Julián — Nos casamos</title>
+    <link rel="preload" as="image" href="assets/portada-maria-julian.png" />
+    <link rel="preload" as="image" href="assets/sello-jm.png" />
+    <style>
+      * { box-sizing: border-box; }
+      :root { --section-overlap: clamp(38px, 8vw, 64px); }
+      html { margin: 0; min-height: 100%; background: #d8c9b5; scroll-behavior: smooth; }
+      body { margin: 0; min-height: 100%; color: #22211f; background: #d8c9b5; }
+      body.intro-active { overflow: hidden; }
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        pointer-events: none;
+        opacity: .055;
+        background-image: radial-gradient(rgba(65, 43, 22, .8) .45px, transparent .65px);
+        background-size: 4px 4px;
+        mix-blend-mode: multiply;
+      }
+      main {
+        position: relative;
+        width: min(100%, 720px);
+        margin: 0 auto;
+        overflow: hidden;
+        background: #eee3d0;
+        box-shadow: 0 0 70px rgba(62, 42, 23, .18);
+      }
+      .invitation-intro {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        width: 100dvw;
+        height: 100vh;
+        height: 100dvh;
+        z-index: 3000;
+        overflow: hidden;
+        background: transparent;
+        touch-action: none;
+        isolation: isolate;
+      }
+      .invitation-intro::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        pointer-events: none;
+        opacity: .78;
+        background:
+          linear-gradient(to bottom right, transparent calc(50% - 1.4px), rgba(116, 79, 39, .48) calc(50% - .35px), rgba(255, 255, 255, .68) 50%, transparent calc(50% + 1.4px)),
+          linear-gradient(to bottom left, transparent calc(50% - 1.4px), rgba(116, 79, 39, .48) calc(50% - .35px), rgba(255, 255, 255, .68) 50%, transparent calc(50% + 1.4px));
+        filter: drop-shadow(0 1px 1px rgba(93, 61, 29, .22));
+        transition: opacity .24s ease .36s;
+      }
+      .invitation-intro.is-opening::after { opacity: 0; }
+      .intro-panel {
+        --panel-y: 0;
+        position: absolute;
+        inset: -1px;
+        z-index: 1;
+        overflow: hidden;
+        background-color: #eee4d4;
+        background-image:
+          radial-gradient(ellipse at 22% 18%, rgba(255, 253, 246, .72), transparent 34%),
+          radial-gradient(ellipse at 80% 84%, rgba(177, 137, 85, .14), transparent 38%),
+          repeating-linear-gradient(102deg, rgba(117, 84, 49, .025) 0 1px, transparent 1px 7px),
+          repeating-linear-gradient(12deg, rgba(255, 255, 255, .16) 0 1px, transparent 1px 9px),
+          linear-gradient(145deg, #f4ecdf 0%, #e9dcc9 52%, #d9c5a9 100%);
+        filter: drop-shadow(0 0 1px rgba(111, 76, 38, .55));
+        transform: translate3d(0, 0, 0) scale(1.012);
+        will-change: transform, opacity;
+        transition:
+          transform 1.58s cubic-bezier(.76, 0, .24, 1) .46s,
+          opacity .78s ease .74s;
+      }
+      .intro-panel::before,
+      .intro-panel::after {
+        content: "";
+        position: absolute;
+        inset: -8%;
+        pointer-events: none;
+      }
+      .intro-panel::before {
+        opacity: .28;
+        background:
+          radial-gradient(ellipse at 26% 82%, transparent 0 35%, rgba(153, 111, 61, .16) 35.4% 35.9%, transparent 36.4%),
+          radial-gradient(ellipse at 73% 20%, transparent 0 28%, rgba(255, 255, 255, .28) 28.4% 29%, transparent 29.5%),
+          repeating-radial-gradient(ellipse at 18% 78%, transparent 0 27px, rgba(146, 105, 60, .075) 28px 29px, transparent 30px 55px);
+        transform: rotate(-7deg) scale(1.08);
+      }
+      .intro-panel::after {
+        opacity: .16;
+        background-image: radial-gradient(rgba(72, 48, 25, .78) .45px, transparent .7px);
+        background-size: 4px 4px;
+        mix-blend-mode: multiply;
+      }
+      .intro-panel--tl {
+        --panel-y: -116dvh;
+        clip-path: polygon(-2% -2%, 102% -2%, 50% 50.35%);
+      }
+      .intro-panel--tr {
+        --panel-y: -118dvh;
+        clip-path: polygon(102% -2%, 102% 102%, 49.65% 50%);
+        transition-delay: .5s, .76s;
+      }
+      .intro-panel--br {
+        --panel-y: -124dvh;
+        clip-path: polygon(102% 102%, -2% 102%, 50% 49.65%);
+        transition-delay: .58s, .82s;
+      }
+      .intro-panel--bl {
+        --panel-y: -121dvh;
+        clip-path: polygon(-2% 102%, -2% -2%, 50.35% 50%);
+        transition-delay: .54s, .79s;
+      }
+      .invitation-intro.is-opening .intro-panel {
+        opacity: 0;
+        transform: translate3d(0, var(--panel-y), 0) scale(1.035);
+      }
+      .intro-seal {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        z-index: 3;
+        width: clamp(108px, 31vw, 154px);
+        aspect-ratio: 1;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+        filter: drop-shadow(0 12px 14px rgba(75, 42, 18, .34));
+        transform: translate(-50%, -50%);
+        transform-origin: center;
+        animation: intro-seal-pulse 2.8s ease-in-out infinite;
+        will-change: transform, opacity;
+      }
+      .intro-seal__image {
+        display: block;
+        width: 100%;
+        height: auto;
+        pointer-events: none;
+        user-select: none;
+      }
+      .intro-seal:focus-visible { outline: 2px solid #9f773d; outline-offset: 7px; }
+      .intro-instruction {
+        position: absolute;
+        left: 50%;
+        top: calc(50% + clamp(78px, 20vw, 105px));
+        z-index: 3;
+        margin: 0;
+        color: #8d6839;
+        font-family: Didot, "Bodoni 72", "Bodoni MT", Georgia, serif;
+        font-size: clamp(.68rem, 2.7vw, .78rem);
+        font-weight: 400;
+        letter-spacing: .2em;
+        line-height: 1;
+        text-transform: uppercase;
+        white-space: nowrap;
+        pointer-events: none;
+        opacity: .78;
+        transform: translateX(-50%);
+        transition: opacity .28s ease, transform .45s cubic-bezier(.76, 0, .24, 1);
+      }
+      .invitation-intro.is-opening .intro-instruction {
+        opacity: 0;
+        transform: translate(-50%, -8px);
+      }
+      .invitation-intro.is-opening .intro-seal {
+        pointer-events: none;
+        animation: intro-seal-open .7s cubic-bezier(.76, 0, .24, 1) forwards;
+      }
+      @keyframes intro-seal-pulse {
+        0%, 72%, 100% { transform: translate(-50%, -50%) scale(1); }
+        84% { transform: translate(-50%, -50%) scale(1.018); }
+      }
+      @keyframes intro-seal-open {
+        0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        13% { opacity: 1; transform: translate(-50%, -50%) scale(.94); }
+        27% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        100% { opacity: 0; transform: translate(-50%, calc(-50% - 18px)) scale(.97); }
+      }
+      .portada {
+        display: block;
+        width: 100%;
+        min-height: 100svh;
+        object-fit: cover;
+        object-position: center top;
+      }
+      body.intro-active .portada {
+        filter: blur(4px);
+        transition: filter 1.25s cubic-bezier(.76, 0, .24, 1) .38s;
+      }
+      body.intro-active.intro-opening .portada { filter: blur(0); }
+      .countdown {
+        position: relative;
+        width: 100%;
+        container-type: inline-size;
+      }
+      .countdown__background { display: block; width: 100%; height: auto; }
+      .countdown__value {
+        position: absolute;
+        left: 40.5%;
+        width: 31%;
+        transform: translate(-50%, -50%);
+        color: #20201e;
+        font-family: Didot, "Bodoni 72", "Bodoni MT", Georgia, serif;
+        font-size: 18cqw;
+        font-weight: 400;
+        line-height: .8;
+        text-align: center;
+        letter-spacing: -.07em;
+        font-variant-numeric: tabular-nums;
+      }
+      .countdown__value--days { top: 30.3%; }
+      .countdown__value--hours { top: 43.8%; }
+      .countdown__value--minutes { top: 57.2%; }
+      .countdown__value--seconds { top: 70.6%; }
+      .countdown__finished {
+        position: absolute;
+        inset: 20% 10% auto;
+        display: none;
+        padding: 1rem;
+        background: rgba(244, 235, 222, .9);
+        font-family: Didot, Georgia, serif;
+        font-size: clamp(1.6rem, 8vw, 3.4rem);
+        text-align: center;
+      }
+      .countdown.is-finished .countdown__value { display: none; }
+      .countdown.is-finished .countdown__finished { display: block; }
+      .countdown,
+      .image-section {
+        margin-top: calc(var(--section-overlap) * -1);
+        -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 var(--section-overlap), #000 100%);
+        mask-image: linear-gradient(to bottom, transparent 0, #000 var(--section-overlap), #000 100%);
+      }
+      .image-section,
+      .image-section img { display: block; width: 100%; }
+      .image-section { position: relative; }
+      .music-section {
+        margin-top: 0;
+        -webkit-mask-image: none;
+        mask-image: none;
+      }
+      .music-section::before { display: none; }
+      .motion-ready .countdown,
+      .motion-ready .image-section {
+        opacity: 0;
+        transform: translateY(22px) scale(.996);
+        transition: opacity .85s ease, transform 1.05s cubic-bezier(.22, 1, .36, 1);
+      }
+      .motion-ready .countdown.is-visible,
+      .motion-ready .image-section.is-visible {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+      .calendar-section { position: relative; }
+      .calendar-section__button {
+        position: absolute;
+        left: 49.8%;
+        top: 75.1%;
+        width: 37.8%;
+        height: 4.6%;
+        border-radius: 999px;
+        transform: translateX(-1%);
+        color: transparent;
+        -webkit-tap-highlight-color: rgba(169, 128, 63, .18);
+      }
+      .calendar-section__button:focus-visible {
+        outline: 3px solid #9f773d;
+        outline-offset: 3px;
+      }
+      .location-section { position: relative; }
+      .location-section__button {
+        position: absolute;
+        left: 28.5%;
+        top: 72.5%;
+        width: 46.2%;
+        height: 4.8%;
+        border-radius: 999px;
+        color: transparent;
+        -webkit-tap-highlight-color: rgba(169, 128, 63, .18);
+      }
+      .location-section__button:focus-visible {
+        outline: 3px solid #9f773d;
+        outline-offset: 3px;
+      }
+      .interactive-image-section { position: relative; }
+      .interactive-image-section__button {
+        position: absolute;
+        z-index: 3;
+        color: transparent;
+        border: 0;
+        background: transparent;
+        border-radius: 4px;
+      }
+      .interactive-image-section__button[aria-disabled="true"] {
+        cursor: default;
+        pointer-events: none;
+      }
+      .interactive-image-section__button:focus-visible {
+        outline: 3px solid #b88b4d;
+        outline-offset: 3px;
+      }
+      .music-section__button {
+        left: 23.1%;
+        top: 83.5%;
+        width: 54%;
+        height: 6.1%;
+      }
+      .album-section__button {
+        left: 40%;
+        top: 82.8%;
+        width: 35.5%;
+        height: 6%;
+        border-radius: 18px;
+      }
+      .album-section {
+        margin-top: calc(var(--section-overlap) * -.38);
+        -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 calc(var(--section-overlap) * .55), #000 100%);
+        mask-image: linear-gradient(to bottom, transparent 0, #000 calc(var(--section-overlap) * .55), #000 100%);
+      }
+      .gifts-section__button {
+        left: 29%;
+        top: 85.4%;
+        width: 41%;
+        height: 5.7%;
+        display: grid;
+        place-items: center;
+        border: 1px solid #aa7e3f;
+        background: rgba(247, 239, 226, .94);
+        color: #9b7139;
+        font-family: Georgia, serif;
+        font-size: clamp(.72rem, 3vw, 1rem);
+        letter-spacing: .18em;
+      }
+      .gifts-section::after {
+        content: "";
+        position: absolute;
+        inset: 83.5% 0 0;
+        z-index: 1;
+        pointer-events: none;
+        background: linear-gradient(to bottom, rgba(244, 235, 221, 0), #f4ebdd 23%, #f4ebdd 100%);
+      }
+      .rsvp-section__button {
+        left: 21%;
+        top: 89.1%;
+        width: 61%;
+        height: 6.3%;
+      }
+      .dress-code-section::after {
+        content: "";
+        position: absolute;
+        inset: 80% 0 0;
+        z-index: 1;
+        pointer-events: none;
+        background: linear-gradient(to bottom, rgba(247, 240, 230, 0), #f5ede2 18%, #f5ede2 100%);
+      }
+      .dress-code-copy {
+        position: absolute;
+        inset: 83.2% 7% auto;
+        z-index: 2;
+        color: #342f2a;
+        text-align: center;
+      }
+      .dress-code-copy__ornament {
+        margin: 0 0 1.1rem;
+        color: #b7843c;
+        font-size: clamp(1rem, 4vw, 1.45rem);
+      }
+      .dress-code-copy__title {
+        margin: 0;
+        font-family: Didot, "Bodoni 72", Georgia, serif;
+        font-size: clamp(1rem, 4.3vw, 1.75rem);
+        font-weight: 400;
+        letter-spacing: .21em;
+      }
+      .dress-code-copy__line {
+        width: 120px;
+        height: 7px;
+        margin: .8rem auto;
+        background:
+          linear-gradient(#b7843c, #b7843c) left center / 49px 1px no-repeat,
+          radial-gradient(circle, #b7843c 0 2px, transparent 2.5px) center / 7px 7px no-repeat,
+          linear-gradient(#b7843c, #b7843c) right center / 49px 1px no-repeat;
+      }
+      .dress-code-copy__text {
+        margin: 0;
+        font-family: Didot, Georgia, serif;
+        font-size: clamp(.86rem, 3.4vw, 1.25rem);
+        letter-spacing: .04em;
+      }
+      .gift-dialog {
+        position: relative;
+        width: min(88%, 430px);
+        border: 1px solid #b99155;
+        border-radius: 24px;
+        padding: 0;
+        background: #f5ede1;
+        color: #282522;
+        box-shadow: 0 24px 80px rgba(32, 24, 17, .35);
+      }
+      .gift-dialog::backdrop {
+        background: rgba(26, 22, 18, .72);
+        backdrop-filter: blur(4px);
+      }
+      .gift-dialog__content { padding: 2rem 1.5rem 1.5rem; text-align: center; }
+      .gift-dialog__title {
+        margin: 0 0 .5rem;
+        font-family: Didot, "Bodoni 72", Georgia, serif;
+        font-size: 2rem;
+        font-weight: 400;
+        letter-spacing: .14em;
+      }
+      .gift-dialog__intro { margin: 0 0 1.5rem; color: #665b4f; }
+      .gift-dialog__item {
+        margin: .8rem 0;
+        padding: 1rem;
+        border: 1px solid rgba(169, 128, 63, .38);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, .45);
+      }
+      .gift-dialog__label {
+        display: block;
+        margin-bottom: .4rem;
+        color: #8e6b39;
+        font-size: .72rem;
+        font-weight: 700;
+        letter-spacing: .22em;
+      }
+      .gift-dialog__value { display: block; font-size: 1rem; overflow-wrap: anywhere; }
+      .gift-dialog__copy {
+        min-height: 44px;
+        border: 1px solid #b99155;
+        border-radius: 999px;
+        font: inherit;
+        letter-spacing: .1em;
+      }
+      .gift-dialog__copy {
+        margin-top: .75rem;
+        padding: .55rem 1rem;
+        background: transparent;
+        color: #664b2c;
+      }
+      .gift-dialog__x {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 2;
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        padding: 10px;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+      }
+      .gallery-section {
+        box-sizing: border-box;
+        padding: clamp(96px, 17vw, 138px) clamp(22px, 6vw, 48px) clamp(70px, 12vw, 100px);
+        background:
+          radial-gradient(circle at 16% 12%, rgba(181, 139, 78, .1), transparent 28%),
+          linear-gradient(145deg, #f7f0e5, #e9ddca);
+        color: #2f2b27;
+        text-align: center;
+      }
+      .gallery-section::before {
+        content: "";
+        position: absolute;
+        inset: 8% auto auto 50%;
+        width: 86px;
+        height: 10px;
+        transform: translateX(-50%);
+        background:
+          linear-gradient(#af8143, #af8143) left center / 34px 1px no-repeat,
+          conic-gradient(from 45deg, transparent 0 25%, #af8143 0 50%, transparent 0 75%, #af8143 0) center / 8px 8px no-repeat,
+          linear-gradient(#af8143, #af8143) right center / 34px 1px no-repeat;
+      }
+      .gallery-section__eyebrow {
+        margin: 0 0 .75rem;
+        color: #9b733d;
+        font-size: clamp(.7rem, 2.5vw, .9rem);
+        letter-spacing: .38em;
+      }
+      .gallery-section__title {
+        margin: 0;
+        font-family: Didot, "Bodoni 72", "Bodoni MT", Georgia, serif;
+        font-size: clamp(2.7rem, 13vw, 5.6rem);
+        font-weight: 400;
+        line-height: .95;
+      }
+      .gallery-section__intro {
+        max-width: 32rem;
+        margin: 1.25rem auto 2.2rem;
+        color: #75695d;
+        font-family: Didot, Georgia, serif;
+        font-size: clamp(1rem, 4vw, 1.3rem);
+        line-height: 1.5;
+      }
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: clamp(10px, 3vw, 18px);
+        align-items: start;
+      }
+      .gallery-card {
+        position: relative;
+        min-width: 0;
+        padding: clamp(6px, 1.6vw, 10px);
+        border: 0;
+        background: #fbf6ed;
+        box-shadow: 0 15px 38px rgba(67, 45, 24, .2);
+        cursor: zoom-in;
+        transition: transform .3s ease, box-shadow .3s ease;
+      }
+      .gallery-card:active { transform: scale(.98); }
+      .gallery-card:focus-visible { outline: 3px solid #a97f46; outline-offset: 4px; }
+      .gallery-card--feature {
+        grid-column: 1 / -1;
+        transform: rotate(-1.15deg);
+      }
+      .gallery-card--left { transform: rotate(1.7deg) translateY(5px); }
+      .gallery-card--right { transform: rotate(-1.3deg) translateY(-5px); }
+      .gallery-card--feature:hover { transform: rotate(-1.15deg) translateY(-4px); }
+      .gallery-card--left:hover { transform: rotate(1.7deg) translateY(1px); }
+      .gallery-card--right:hover { transform: rotate(-1.3deg) translateY(-9px); }
+      .gallery-card img { width: 100%; object-fit: cover; }
+      .gallery-card--feature img { aspect-ratio: 4 / 3; object-position: center 40%; }
+      .gallery-card--left img,
+      .gallery-card--right img { aspect-ratio: 3 / 4; }
+      .gallery-card--left img { object-position: 57% center; }
+      .gallery-card--right img { object-position: 38% center; }
+      .gallery-section__signature {
+        margin: 2.5rem 0 0;
+        color: #9b733d;
+        font-family: "Segoe Script", "Brush Script MT", cursive;
+        font-size: clamp(1.4rem, 5vw, 2rem);
+      }
+      .gallery-lightbox {
+        width: 100vw;
+        max-width: none;
+        height: 100dvh;
+        max-height: none;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background: rgba(14, 12, 10, .96);
+        color: #fff8ed;
+      }
+      .gallery-lightbox::backdrop { background: rgba(14, 12, 10, .96); }
+      .gallery-lightbox__figure {
+        display: grid;
+        place-items: center;
+        align-content: center;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 72px 48px 58px;
+        box-sizing: border-box;
+      }
+      .gallery-lightbox__image {
+        display: block;
+        max-width: 100%;
+        max-height: calc(100dvh - 150px);
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        box-shadow: 0 20px 70px rgba(0, 0, 0, .55);
+      }
+      .gallery-lightbox__caption {
+        margin-top: 1rem;
+        font-family: Didot, Georgia, serif;
+        font-size: 1rem;
+        letter-spacing: .08em;
+        text-align: center;
+      }
+      .gallery-lightbox__close,
+      .gallery-lightbox__nav {
+        position: fixed;
+        z-index: 2;
+        display: grid;
+        place-items: center;
+        width: 46px;
+        height: 46px;
+        padding: 9px;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+      }
+      .gallery-lightbox__close { top: max(18px, env(safe-area-inset-top)); right: 18px; }
+      .gallery-lightbox__nav { top: 50%; transform: translateY(-50%); }
+      .gallery-lightbox__nav--prev { left: 10px; }
+      .gallery-lightbox__nav--next { right: 10px; }
+      .modal-control-icon { display: block; width: 100%; height: 100%; }
+      .gallery-lightbox .modal-control-icon { filter: invert(1); }
+      .audio-toggle {
+        position: fixed;
+        right: max(14px, env(safe-area-inset-right));
+        bottom: max(16px, env(safe-area-inset-bottom));
+        z-index: 1100;
+        display: grid;
+        place-items: center;
+        width: 50px;
+        height: 50px;
+        padding: 4px;
+        border: 1px solid rgba(172, 130, 69, .75);
+        border-radius: 999px;
+        background: rgba(247, 239, 226, .9);
+        color: #352d26;
+        box-shadow: 0 10px 30px rgba(42, 29, 17, .24);
+        backdrop-filter: blur(10px);
+        font-family: Georgia, serif;
+      }
+      .audio-toggle__disc {
+        display: grid;
+        place-items: center;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #25374b;
+        color: #e9c68d;
+        font-size: 1.15rem;
+        line-height: 1;
+        box-shadow: inset 0 0 0 1px rgba(233, 198, 141, .3);
+      }
+      .audio-toggle__label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+      .audio-toggle.is-playing { animation: audio-pulse 2.2s ease-in-out infinite; }
+      .audio-toggle:focus-visible { outline: 3px solid #b88b4d; outline-offset: 3px; }
+      @keyframes audio-pulse {
+        50% { box-shadow: 0 10px 30px rgba(42, 29, 17, .24), 0 0 0 6px rgba(184, 139, 77, .13); }
+      }
+      .site-footer {
+        position: relative;
+        margin-top: 0;
+        padding: 72px 1.5rem max(52px, env(safe-area-inset-bottom));
+        border-top: 1px solid rgba(168, 122, 59, .35);
+        background: #f3eadc;
+        color: #3a312a;
+        text-align: center;
+      }
+      .site-footer__ornament {
+        width: 92px;
+        height: 10px;
+        margin: 0 auto 1.5rem;
+        background:
+          linear-gradient(#a87a3b, #a87a3b) left center / 36px 1px no-repeat,
+          conic-gradient(from 45deg, transparent 0 25%, #a87a3b 0 50%, transparent 0 75%, #a87a3b 0) center / 9px 9px no-repeat,
+          linear-gradient(#a87a3b, #a87a3b) right center / 36px 1px no-repeat;
+      }
+      .site-footer__credit {
+        margin: 0;
+        font-family: Didot, "Bodoni 72", Georgia, serif;
+        font-size: clamp(1.05rem, 4vw, 1.35rem);
+        letter-spacing: .04em;
+      }
+      .site-footer__heart { color: #a56f4c; }
+      .site-footer__brand {
+        color: #2f4357;
+        font-weight: 600;
+        letter-spacing: .08em;
+      }
+      .site-footer__socials {
+        display: flex;
+        justify-content: center;
+        gap: clamp(1rem, 5vw, 2rem);
+        margin-top: 1.7rem;
+      }
+      .site-footer__link {
+        display: grid;
+        justify-items: center;
+        gap: .5rem;
+        color: #3a312a;
+        text-decoration: none;
+      }
+      .site-footer__icon {
+        display: block;
+        width: 27px;
+        height: 27px;
+        object-fit: contain;
+        transition: transform .25s ease, opacity .25s ease;
+      }
+      .site-footer__link:hover .site-footer__icon,
+      .site-footer__link:focus-visible .site-footer__icon {
+        transform: translateY(-3px);
+        opacity: .72;
+      }
+      .site-footer__link:focus-visible { outline: 2px solid #a87a3b; outline-offset: 5px; border-radius: 8px; }
+      .site-footer__label {
+        font-size: .67rem;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        .intro-seal { animation: none; }
+        .intro-panel {
+          transform: none !important;
+          transition: opacity .24s ease !important;
+        }
+        .invitation-intro.is-opening .intro-panel { opacity: 0; }
+        .invitation-intro.is-opening .intro-seal {
+          animation: none;
+          opacity: 0;
+          transition: opacity .16s ease;
+        }
+        body.intro-active .portada { transition: filter .24s ease; }
+        .motion-ready .countdown,
+        .motion-ready .image-section {
+          opacity: 1;
+          transform: none;
+          transition: none;
+        }
+        .audio-toggle.is-playing { animation: none; }
+      }
+    </style>
+  </head>
+  <body class="intro-active">
+    <div class="invitation-intro" id="invitation-intro" role="dialog" aria-modal="true" aria-label="Presentación de la invitación">
+      <div class="intro-panel intro-panel--tl" aria-hidden="true"></div>
+      <div class="intro-panel intro-panel--tr" aria-hidden="true"></div>
+      <div class="intro-panel intro-panel--br" aria-hidden="true"></div>
+      <div class="intro-panel intro-panel--bl" aria-hidden="true"></div>
+      <button class="intro-seal" id="open-invitation" type="button" aria-label="Abrir invitación">
+        <img class="intro-seal__image" src="assets/sello-jm.png" alt="" width="1254" height="1254" />
+      </button>
+      <p class="intro-instruction" aria-hidden="true">Tocá el sello para abrir</p>
+    </div>
+    <main tabindex="-1" inert>
+      <img class="portada" src="assets/portada-maria-julian.png" alt="María y Julián — Nos casamos" />
+      <section class="countdown" id="countdown" aria-label="Cuenta regresiva para el casamiento">
+        <img class="countdown__background" src="assets/cuenta-regresiva-fondo.png" alt="" />
+        <span class="countdown__value countdown__value--days" id="days">00</span>
+        <span class="countdown__value countdown__value--hours" id="hours">00</span>
+        <span class="countdown__value countdown__value--minutes" id="minutes">00</span>
+        <span class="countdown__value countdown__value--seconds" id="seconds">00</span>
+        <p class="countdown__finished">¡Llegó el gran día!</p>
+        <span class="countdown__announcement" aria-live="polite" hidden></span>
+      </section>
+      <section class="image-section" aria-label="Nuestra frase elegida">
+        <img src="assets/frase-rut-1-16.png" alt="No me ruegues que te deje y me aparte de ti, porque a donde tú fueres, iré yo, y donde tú vivieres, viviré yo. Tu pueblo será mi pueblo, y tu Dios mi Dios. Rut 1:16." loading="lazy" />
+      </section>
+      <section class="image-section gallery-section" aria-labelledby="gallery-title">
+        <p class="gallery-section__eyebrow">RECUERDOS</p>
+        <h2 class="gallery-section__title" id="gallery-title">Nuestra historia</h2>
+        <p class="gallery-section__intro">Momentos que hablan de nosotros y del camino que elegimos compartir.</p>
+        <div class="gallery-grid">
+          <button class="gallery-card gallery-card--feature" type="button" data-gallery-index="0" aria-label="Ampliar foto de María y Julián mirándose">
+            <img src="assets/galeria/maria-julian-mirada.jpeg" alt="María y Julián mirándose en el campo al atardecer" loading="lazy" />
+          </button>
+          <button class="gallery-card gallery-card--left" type="button" data-gallery-index="1" aria-label="Ampliar foto de María y Julián besándose">
+            <img src="assets/galeria/maria-julian-beso.jpeg" alt="María y Julián besándose en un paisaje campestre" loading="lazy" />
+          </button>
+          <button class="gallery-card gallery-card--right" type="button" data-gallery-index="2" aria-label="Ampliar foto de María y Julián contemplando el paisaje">
+            <img src="assets/galeria/maria-julian-paisaje.jpeg" alt="María y Julián abrazados contemplando el paisaje" loading="lazy" />
+          </button>
+        </div>
+        <p class="gallery-section__signature">María &amp; Julián</p>
+      </section>
+      <section class="image-section calendar-section" aria-label="Fecha del casamiento">
+        <img src="assets/fecha-y-calendario.png" alt="Sábado 9 de enero de 2027, de 20:30 a 04:30 horas." loading="lazy" />
+        <a class="calendar-section__button" href="assets/casamiento-maria-julian.ics" aria-label="Agregar el casamiento de María y Julián al calendario">Agregar al calendario</a>
+      </section>
+      <section class="image-section location-section" aria-label="Ubicación de la ceremonia y recepción">
+        <img src="assets/ubicacion-malba-eventos.png" alt="Ceremonia y recepción en Malba Eventos, Leguizamón Onesimo 2500, Neuquén." loading="lazy" />
+        <a class="location-section__button" href="https://www.google.com/maps/search/?api=1&amp;query=Malba%20Eventos%2C%20Leguizamon%20Onesimo%202500%2C%20Neuquen" target="_blank" rel="noopener noreferrer" aria-label="Ver Malba Eventos en Google Maps">Ver ubicación</a>
+      </section>
+      <section class="image-section dress-code-section" aria-label="Código de vestimenta">
+        <img src="assets/dress-code.png" alt="Dress code elegante sport. Colores reservados: azul oscuro, verde salvia, rosa, visón, blanco y beige. Por favor, evitá utilizar estos tonos." loading="lazy" />
+        <div class="dress-code-copy" aria-hidden="true">
+          <div class="dress-code-copy__ornament">❦</div>
+          <h3 class="dress-code-copy__title">COLORES RESERVADOS</h3>
+          <div class="dress-code-copy__line"></div>
+          <p class="dress-code-copy__text">Por favor, evitá utilizar estos tonos.</p>
+        </div>
+      </section>
+      <section class="image-section interactive-image-section music-section" aria-label="Música de nuestra historia">
+        <img src="assets/musica-playlist.png" alt="Música. La música también forma parte de nuestra historia. Escuchar playlist." loading="lazy" />
+        <button class="interactive-image-section__button music-section__button" id="music-section-play" type="button" aria-label="Reproducir la música de la invitación">Escuchar música</button>
+      </section>
+      <section class="image-section interactive-image-section album-section" aria-label="Álbum digital de María y Julián">
+        <img src="assets/album-colaborativo-v2.png" alt="Álbum colaborativo. Subí tus fotos y sé parte de nuestra historia. María y Julián, nuestra boda." loading="lazy" />
+        <span class="interactive-image-section__button album-section__button" role="link" aria-label="Subir fotos al álbum colaborativo, enlace pendiente" aria-disabled="true">Subir fotos</span>
+      </section>
+      <section class="image-section interactive-image-section gifts-section" aria-label="Regalos">
+        <img src="assets/regalos.png" alt="Regalos. Lo más importante es compartir este día con vos. Si deseás hacernos un regalo, podés ayudarnos a seguir construyendo nuestros sueños." loading="lazy" />
+        <button class="interactive-image-section__button gifts-section__button" id="open-gifts" type="button" aria-label="Ver datos para regalos">Ver datos</button>
+      </section>
+      <section class="image-section interactive-image-section rsvp-section" aria-label="Confirmación de asistencia">
+        <img src="assets/confirmar-asistencia.png" alt="Confirmá antes del 15 de diciembre para que podamos reservar tu lugar. Estamos deseando celebrar con vos." loading="lazy" />
+        <a class="interactive-image-section__button rsvp-section__button" href="https://bloomdate-rsvp.netlify.app/r/boda-maria-y-julian" target="_blank" rel="noopener noreferrer" aria-label="Confirmar asistencia en Bloomdate">Confirmar asistencia</a>
+      </section>
+      <footer class="site-footer">
+        <div class="site-footer__ornament" aria-hidden="true"></div>
+        <p class="site-footer__credit">Hecho con amor <span class="site-footer__heart" aria-label="corazón">♥</span> por <span class="site-footer__brand">Bloomdate</span></p>
+        <nav class="site-footer__socials" aria-label="Contactos de Bloomdate">
+          <a class="site-footer__link" href="https://wa.me/541140436324" target="_blank" rel="noopener noreferrer" aria-label="Contactar a Bloomdate por WhatsApp">
+            <img class="site-footer__icon" src="assets/icons/whatsapp.svg" alt="" aria-hidden="true" />
+            <span class="site-footer__label">WhatsApp</span>
+          </a>
+          <a class="site-footer__link" href="https://www.instagram.com/bloomdate.invitaciones/" target="_blank" rel="noopener noreferrer" aria-label="Visitar Instagram de Bloomdate">
+            <img class="site-footer__icon" src="assets/icons/instagram.svg" alt="" aria-hidden="true" />
+            <span class="site-footer__label">Instagram</span>
+          </a>
+          <a class="site-footer__link" href="https://bloomdate-site.netlify.app/" target="_blank" rel="noopener noreferrer" aria-label="Visitar el sitio web de Bloomdate">
+            <img class="site-footer__icon" src="assets/icons/globe.svg" alt="" aria-hidden="true" />
+            <span class="site-footer__label">Web</span>
+          </a>
+        </nav>
+      </footer>
+    </main>
+    <audio id="invitation-audio" src="assets/audio/jesus.mp3" preload="metadata" loop></audio>
+    <button class="audio-toggle" id="audio-toggle" type="button" aria-label="Reproducir música" aria-pressed="false" inert>
+      <span class="audio-toggle__disc" aria-hidden="true">♪</span>
+      <span class="audio-toggle__label">MÚSICA</span>
+    </button>
+    <dialog class="gift-dialog" id="gift-dialog" aria-labelledby="gift-dialog-title">
+      <div class="gift-dialog__content">
+        <h2 class="gift-dialog__title" id="gift-dialog-title">REGALOS</h2>
+        <p class="gift-dialog__intro">Gracias por ayudarnos a seguir construyendo nuestros sueños.</p>
+        <div class="gift-dialog__item">
+          <span class="gift-dialog__label">ALIAS</span>
+          <strong class="gift-dialog__value">JYM-CASAMIENTO</strong>
+          <button class="gift-dialog__copy" type="button" data-copy="JYM-CASAMIENTO">Copiar alias</button>
+        </div>
+        <div class="gift-dialog__item">
+          <span class="gift-dialog__label">CBU</span>
+          <strong class="gift-dialog__value">070658830004008730089</strong>
+          <button class="gift-dialog__copy" type="button" data-copy="070658830004008730089">Copiar CBU</button>
+        </div>
+        <div class="gift-dialog__item">
+          <span class="gift-dialog__label">BANCO</span>
+          <strong class="gift-dialog__value">Banco Galicia</strong>
+        </div>
+        <button class="gift-dialog__x" id="close-gifts" type="button" aria-label="Cerrar datos para regalos">
+          <img class="modal-control-icon" src="assets/icons/x.svg" alt="" aria-hidden="true" />
+        </button>
+      </div>
+    </dialog>
+    <dialog class="gallery-lightbox" id="gallery-lightbox" aria-label="Galería de fotos ampliada">
+      <button class="gallery-lightbox__close" id="gallery-close" type="button" aria-label="Cerrar galería">
+        <img class="modal-control-icon" src="assets/icons/x.svg" alt="" aria-hidden="true" />
+      </button>
+      <button class="gallery-lightbox__nav gallery-lightbox__nav--prev" id="gallery-prev" type="button" aria-label="Foto anterior">
+        <img class="modal-control-icon" src="assets/icons/chevron-left.svg" alt="" aria-hidden="true" />
+      </button>
+      <figure class="gallery-lightbox__figure">
+        <img class="gallery-lightbox__image" id="gallery-image" src="assets/galeria/maria-julian-mirada.jpeg" alt="" />
+        <figcaption class="gallery-lightbox__caption" id="gallery-caption"></figcaption>
+      </figure>
+      <button class="gallery-lightbox__nav gallery-lightbox__nav--next" id="gallery-next" type="button" aria-label="Foto siguiente">
+        <img class="modal-control-icon" src="assets/icons/chevron-right.svg" alt="" aria-hidden="true" />
+      </button>
+    </dialog>
+    <script>
+      const weddingDate = new Date('2027-01-09T20:30:00-03:00');
+      const countdown = document.querySelector('#countdown');
+      const values = {
+        days: document.querySelector('#days'),
+        hours: document.querySelector('#hours'),
+        minutes: document.querySelector('#minutes'),
+        seconds: document.querySelector('#seconds'),
+      };
+
+      function updateCountdown() {
+        const distance = weddingDate.getTime() - Date.now();
+        if (distance <= 0) {
+          countdown.classList.add('is-finished');
+          return;
+        }
+
+        values.days.textContent = String(Math.floor(distance / 86400000)).padStart(2, '0');
+        values.hours.textContent = String(Math.floor((distance % 86400000) / 3600000)).padStart(2, '0');
+        values.minutes.textContent = String(Math.floor((distance % 3600000) / 60000)).padStart(2, '0');
+        values.seconds.textContent = String(Math.floor((distance % 60000) / 1000)).padStart(2, '0');
+      }
+
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+
+      const invitationAudio = document.querySelector('#invitation-audio');
+      const audioToggle = document.querySelector('#audio-toggle');
+      const audioIcon = audioToggle.querySelector('.audio-toggle__disc');
+      const audioLabel = audioToggle.querySelector('.audio-toggle__label');
+      const musicSectionPlay = document.querySelector('#music-section-play');
+      invitationAudio.volume = 0.62;
+
+      function syncAudioControls() {
+        const isPlaying = !invitationAudio.paused;
+        audioToggle.classList.toggle('is-playing', isPlaying);
+        audioToggle.setAttribute('aria-pressed', String(isPlaying));
+        audioToggle.setAttribute('aria-label', isPlaying ? 'Pausar música' : 'Reproducir música');
+        audioIcon.textContent = isPlaying ? 'Ⅱ' : '♪';
+        audioLabel.textContent = isPlaying ? 'PAUSAR' : 'MÚSICA';
+        musicSectionPlay.setAttribute('aria-label', isPlaying ? 'Pausar la música de la invitación' : 'Reproducir la música de la invitación');
+      }
+
+      async function toggleInvitationAudio() {
+        if (!invitationAudio.paused) {
+          invitationAudio.pause();
+          return;
+        }
+        try {
+          await invitationAudio.play();
+        } catch {
+          audioLabel.textContent = 'REINTENTAR';
+        }
+      }
+
+      audioToggle.addEventListener('click', toggleInvitationAudio);
+      musicSectionPlay.addEventListener('click', toggleInvitationAudio);
+      invitationAudio.addEventListener('play', syncAudioControls);
+      invitationAudio.addEventListener('pause', syncAudioControls);
+      syncAudioControls();
+
+      const invitationIntro = document.querySelector('#invitation-intro');
+      const openInvitation = document.querySelector('#open-invitation');
+      openInvitation.addEventListener('click', async () => {
+        if (invitationIntro.classList.contains('is-opening')) return;
+        invitationIntro.classList.add('is-opening');
+        document.body.classList.add('intro-opening');
+        openInvitation.disabled = true;
+        try { await invitationAudio.play(); } catch { }
+
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.setTimeout(() => {
+          invitationIntro.remove();
+          document.body.classList.remove('intro-active', 'intro-opening');
+          const invitationMain = document.querySelector('main');
+          invitationMain.removeAttribute('inert');
+          audioToggle.removeAttribute('inert');
+          invitationMain.focus({ preventScroll: true });
+        }, reducedMotion ? 320 : 2250);
+      });
+
+      const giftDialog = document.querySelector('#gift-dialog');
+      document.querySelector('#open-gifts').addEventListener('click', () => giftDialog.showModal());
+      document.querySelector('#close-gifts').addEventListener('click', () => giftDialog.close());
+      giftDialog.addEventListener('click', (event) => {
+        if (event.target === giftDialog) giftDialog.close();
+      });
+
+      document.querySelectorAll('[data-copy]').forEach((button) => {
+        button.addEventListener('click', async () => {
+          const originalText = button.textContent;
+          try {
+            await navigator.clipboard.writeText(button.dataset.copy);
+            button.textContent = '¡Copiado!';
+          } catch {
+            const temporaryInput = document.createElement('textarea');
+            temporaryInput.value = button.dataset.copy;
+            document.body.appendChild(temporaryInput);
+            temporaryInput.select();
+            document.execCommand('copy');
+            temporaryInput.remove();
+            button.textContent = '¡Copiado!';
+          }
+          setTimeout(() => { button.textContent = originalText; }, 1600);
+        });
+      });
+
+      const galleryItems = [
+        {
+          src: 'assets/galeria/maria-julian-mirada.jpeg',
+          alt: 'María y Julián mirándose en el campo al atardecer',
+          caption: 'El comienzo de todo lo que soñamos juntos.',
+        },
+        {
+          src: 'assets/galeria/maria-julian-beso.jpeg',
+          alt: 'María y Julián besándose en un paisaje campestre',
+          caption: 'Donde estés vos, ahí quiero estar.',
+        },
+        {
+          src: 'assets/galeria/maria-julian-paisaje.jpeg',
+          alt: 'María y Julián abrazados contemplando el paisaje',
+          caption: 'Un mismo camino, una vida compartida.',
+        },
+      ];
+      const galleryLightbox = document.querySelector('#gallery-lightbox');
+      const galleryImage = document.querySelector('#gallery-image');
+      const galleryCaption = document.querySelector('#gallery-caption');
+      let galleryIndex = 0;
+      let galleryTouchStart = 0;
+
+      function showGalleryImage(index) {
+        galleryIndex = (index + galleryItems.length) % galleryItems.length;
+        const item = galleryItems[galleryIndex];
+        galleryImage.src = item.src;
+        galleryImage.alt = item.alt;
+        galleryCaption.textContent = item.caption;
+      }
+
+      document.querySelectorAll('[data-gallery-index]').forEach((button) => {
+        button.addEventListener('click', () => {
+          showGalleryImage(Number(button.dataset.galleryIndex));
+          galleryLightbox.showModal();
+        });
+      });
+      document.querySelector('#gallery-close').addEventListener('click', () => galleryLightbox.close());
+      document.querySelector('#gallery-prev').addEventListener('click', () => showGalleryImage(galleryIndex - 1));
+      document.querySelector('#gallery-next').addEventListener('click', () => showGalleryImage(galleryIndex + 1));
+      galleryLightbox.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowLeft') showGalleryImage(galleryIndex - 1);
+        if (event.key === 'ArrowRight') showGalleryImage(galleryIndex + 1);
+      });
+      galleryLightbox.addEventListener('touchstart', (event) => {
+        galleryTouchStart = event.changedTouches[0].clientX;
+      }, { passive: true });
+      galleryLightbox.addEventListener('touchend', (event) => {
+        const distance = event.changedTouches[0].clientX - galleryTouchStart;
+        if (Math.abs(distance) < 50) return;
+        showGalleryImage(galleryIndex + (distance < 0 ? 1 : -1));
+      }, { passive: true });
+
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('motion-ready');
+        const sections = document.querySelectorAll('.countdown, .image-section');
+        const revealSections = new IntersectionObserver((entries, observer) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          });
+        }, { rootMargin: '12% 0px 12%', threshold: 0.04 });
+        sections.forEach((section) => revealSections.observe(section));
+      }
+    </script>
+  </body>
+</html>

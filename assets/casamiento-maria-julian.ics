@@ -1,0 +1,16 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Maria y Julian//Invitacion de casamiento//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:casamiento-maria-julian-20270109@invitacion.local
+DTSTAMP:20260823T053000Z
+DTSTART;TZID=America/Argentina/Buenos_Aires:20270109T203000
+DTEND;TZID=America/Argentina/Buenos_Aires:20270110T043000
+SUMMARY:Casamiento de María y Julián
+DESCRIPTION:¡Nos casamos! Te esperamos para compartir este día tan especial con nosotros.
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+END:VCALENDAR
