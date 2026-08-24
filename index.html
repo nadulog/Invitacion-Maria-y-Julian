@@ -341,28 +341,6 @@
         -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 calc(var(--section-overlap) * .55), #000 100%);
         mask-image: linear-gradient(to bottom, transparent 0, #000 calc(var(--section-overlap) * .55), #000 100%);
       }
-      .gifts-section__button {
-        left: 29%;
-        top: 85.4%;
-        width: 41%;
-        height: 5.7%;
-        display: grid;
-        place-items: center;
-        border: 1px solid #aa7e3f;
-        background: rgba(247, 239, 226, .94);
-        color: #9b7139;
-        font-family: Georgia, serif;
-        font-size: clamp(.72rem, 3vw, 1rem);
-        letter-spacing: .18em;
-      }
-      .gifts-section::after {
-        content: "";
-        position: absolute;
-        inset: 83.5% 0 0;
-        z-index: 1;
-        pointer-events: none;
-        background: linear-gradient(to bottom, rgba(244, 235, 221, 0), #f4ebdd 23%, #f4ebdd 100%);
-      }
       .rsvp-section__button {
         left: 21%;
         top: 89.1%;
@@ -410,72 +388,6 @@
         font-family: Didot, Georgia, serif;
         font-size: clamp(.86rem, 3.4vw, 1.25rem);
         letter-spacing: .04em;
-      }
-      .gift-dialog {
-        position: relative;
-        width: min(88%, 430px);
-        border: 1px solid #b99155;
-        border-radius: 24px;
-        padding: 0;
-        background: #f5ede1;
-        color: #282522;
-        box-shadow: 0 24px 80px rgba(32, 24, 17, .35);
-      }
-      .gift-dialog::backdrop {
-        background: rgba(26, 22, 18, .72);
-        backdrop-filter: blur(4px);
-      }
-      .gift-dialog__content { padding: 2rem 1.5rem 1.5rem; text-align: center; }
-      .gift-dialog__title {
-        margin: 0 0 .5rem;
-        font-family: Didot, "Bodoni 72", Georgia, serif;
-        font-size: 2rem;
-        font-weight: 400;
-        letter-spacing: .14em;
-      }
-      .gift-dialog__intro { margin: 0 0 1.5rem; color: #665b4f; }
-      .gift-dialog__item {
-        margin: .8rem 0;
-        padding: 1rem;
-        border: 1px solid rgba(169, 128, 63, .38);
-        border-radius: 14px;
-        background: rgba(255, 255, 255, .45);
-      }
-      .gift-dialog__label {
-        display: block;
-        margin-bottom: .4rem;
-        color: #8e6b39;
-        font-size: .72rem;
-        font-weight: 700;
-        letter-spacing: .22em;
-      }
-      .gift-dialog__value { display: block; font-size: 1rem; overflow-wrap: anywhere; }
-      .gift-dialog__copy {
-        min-height: 44px;
-        border: 1px solid #b99155;
-        border-radius: 999px;
-        font: inherit;
-        letter-spacing: .1em;
-      }
-      .gift-dialog__copy {
-        margin-top: .75rem;
-        padding: .55rem 1rem;
-        background: transparent;
-        color: #664b2c;
-      }
-      .gift-dialog__x {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        z-index: 2;
-        display: grid;
-        place-items: center;
-        width: 44px;
-        height: 44px;
-        padding: 10px;
-        border: 0;
-        border-radius: 0;
-        background: transparent;
       }
       .gallery-section {
         box-sizing: border-box;
@@ -813,9 +725,8 @@
         <img src="assets/album-colaborativo-v2.png" alt="Álbum colaborativo. Subí tus fotos y sé parte de nuestra historia. María y Julián, nuestra boda." loading="lazy" />
         <span class="interactive-image-section__button album-section__button" role="link" aria-label="Subir fotos al álbum colaborativo, enlace pendiente" aria-disabled="true">Subir fotos</span>
       </section>
-      <section class="image-section interactive-image-section gifts-section" aria-label="Regalos">
-        <img src="assets/regalos.png" alt="Regalos. Lo más importante es compartir este día con vos. Si deseás hacernos un regalo, podés ayudarnos a seguir construyendo nuestros sueños." loading="lazy" />
-        <button class="interactive-image-section__button gifts-section__button" id="open-gifts" type="button" aria-label="Ver datos para regalos">Ver datos</button>
+      <section class="image-section" aria-label="Regalos y datos bancarios">
+        <img src="assets/regalos.png" alt="Regalos. Alias JYM-CASAMIENTO, CBU 070658830004008730089, Banco Galicia." loading="lazy" />
       </section>
       <section class="image-section interactive-image-section rsvp-section" aria-label="Confirmación de asistencia">
         <img src="assets/confirmar-asistencia.png" alt="Confirmá antes del 15 de diciembre para que podamos reservar tu lugar. Estamos deseando celebrar con vos." loading="lazy" />
@@ -845,29 +756,6 @@
       <span class="audio-toggle__disc" aria-hidden="true">♪</span>
       <span class="audio-toggle__label">MÚSICA</span>
     </button>
-    <dialog class="gift-dialog" id="gift-dialog" aria-labelledby="gift-dialog-title">
-      <div class="gift-dialog__content">
-        <h2 class="gift-dialog__title" id="gift-dialog-title">REGALOS</h2>
-        <p class="gift-dialog__intro">Gracias por ayudarnos a seguir construyendo nuestros sueños.</p>
-        <div class="gift-dialog__item">
-          <span class="gift-dialog__label">ALIAS</span>
-          <strong class="gift-dialog__value">JYM-CASAMIENTO</strong>
-          <button class="gift-dialog__copy" type="button" data-copy="JYM-CASAMIENTO">Copiar alias</button>
-        </div>
-        <div class="gift-dialog__item">
-          <span class="gift-dialog__label">CBU</span>
-          <strong class="gift-dialog__value">070658830004008730089</strong>
-          <button class="gift-dialog__copy" type="button" data-copy="070658830004008730089">Copiar CBU</button>
-        </div>
-        <div class="gift-dialog__item">
-          <span class="gift-dialog__label">BANCO</span>
-          <strong class="gift-dialog__value">Banco Galicia</strong>
-        </div>
-        <button class="gift-dialog__x" id="close-gifts" type="button" aria-label="Cerrar datos para regalos">
-          <img class="modal-control-icon" src="assets/icons/x.svg" alt="" aria-hidden="true" />
-        </button>
-      </div>
-    </dialog>
     <dialog class="gallery-lightbox" id="gallery-lightbox" aria-label="Galería de fotos ampliada">
       <button class="gallery-lightbox__close" id="gallery-close" type="button" aria-label="Cerrar galería">
         <img class="modal-control-icon" src="assets/icons/x.svg" alt="" aria-hidden="true" />
@@ -959,32 +847,6 @@
           audioToggle.removeAttribute('inert');
           invitationMain.focus({ preventScroll: true });
         }, reducedMotion ? 320 : 2250);
-      });
-
-      const giftDialog = document.querySelector('#gift-dialog');
-      document.querySelector('#open-gifts').addEventListener('click', () => giftDialog.showModal());
-      document.querySelector('#close-gifts').addEventListener('click', () => giftDialog.close());
-      giftDialog.addEventListener('click', (event) => {
-        if (event.target === giftDialog) giftDialog.close();
-      });
-
-      document.querySelectorAll('[data-copy]').forEach((button) => {
-        button.addEventListener('click', async () => {
-          const originalText = button.textContent;
-          try {
-            await navigator.clipboard.writeText(button.dataset.copy);
-            button.textContent = '¡Copiado!';
-          } catch {
-            const temporaryInput = document.createElement('textarea');
-            temporaryInput.value = button.dataset.copy;
-            document.body.appendChild(temporaryInput);
-            temporaryInput.select();
-            document.execCommand('copy');
-            temporaryInput.remove();
-            button.textContent = '¡Copiado!';
-          }
-          setTimeout(() => { button.textContent = originalText; }, 1600);
-        });
       });
 
       const galleryItems = [
