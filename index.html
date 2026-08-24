@@ -788,7 +788,7 @@
       </section>
       <section class="image-section interactive-image-section music-section" aria-label="Música de nuestra historia">
         <img src="assets/musica-playlist.png" alt="Música. La música también forma parte de nuestra historia. Escuchar playlist." loading="lazy" />
-        <button class="interactive-image-section__button music-section__button" id="music-section-play" type="button" aria-label="Reproducir la música de la invitación">Escuchar música</button>
+        <a class="interactive-image-section__button music-section__button" href="https://open.spotify.com/playlist/6S83MHT15VJWjyLW151EY0?si=GyMPAc-LQ4ecMHMsaY99yQ&amp;utm_source=whatsapp&amp;pi=tTFPnq9VTtGvV&amp;pt=4700ba484e250e7b556175db87ec255c" target="_blank" rel="noopener noreferrer" aria-label="Abrir playlist de María y Julián en Spotify">Escuchar playlist</a>
       </section>
       <section class="image-section interactive-image-section album-section" aria-label="Álbum digital de María y Julián">
         <img src="assets/album-colaborativo-v2.png" alt="Álbum colaborativo. Subí tus fotos y sé parte de nuestra historia. María y Julián, nuestra boda." loading="lazy" />
@@ -894,7 +894,6 @@
       const audioToggle = document.querySelector('#audio-toggle');
       const audioIcon = audioToggle.querySelector('.audio-toggle__disc');
       const audioLabel = audioToggle.querySelector('.audio-toggle__label');
-      const musicSectionPlay = document.querySelector('#music-section-play');
       invitationAudio.volume = 0.62;
 
       function syncAudioControls() {
@@ -904,7 +903,6 @@
         audioToggle.setAttribute('aria-label', isPlaying ? 'Pausar música' : 'Reproducir música');
         audioIcon.textContent = isPlaying ? 'Ⅱ' : '♪';
         audioLabel.textContent = isPlaying ? 'PAUSAR' : 'MÚSICA';
-        musicSectionPlay.setAttribute('aria-label', isPlaying ? 'Pausar la música de la invitación' : 'Reproducir la música de la invitación');
       }
 
       async function toggleInvitationAudio() {
@@ -920,7 +918,6 @@
       }
 
       audioToggle.addEventListener('click', toggleInvitationAudio);
-      musicSectionPlay.addEventListener('click', toggleInvitationAudio);
       invitationAudio.addEventListener('play', syncAudioControls);
       invitationAudio.addEventListener('pause', syncAudioControls);
       syncAudioControls();
