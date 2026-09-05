@@ -527,6 +527,85 @@
       .gallery-lightbox__nav--next { right: 10px; }
       .modal-control-icon { display: block; width: 100%; height: 100%; }
       .gallery-lightbox .modal-control-icon { filter: invert(1); }
+      .gifts-section__button {
+        position: absolute;
+        left: 29%;
+        bottom: 5.1%;
+        width: 42%;
+        height: 5.5%;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+      }
+      .gifts-section__button:focus-visible {
+        outline: 3px solid #a97f46;
+        outline-offset: 4px;
+      }
+      .gift-modal {
+        width: min(88vw, 430px);
+        padding: 0;
+        border: 1px solid rgba(169, 127, 70, .55);
+        background: #f8f0e3;
+        color: #453d34;
+        box-shadow: 0 22px 70px rgba(45, 33, 21, .38);
+      }
+      .gift-modal::backdrop {
+        background: rgba(34, 28, 22, .68);
+        backdrop-filter: blur(3px);
+      }
+      .gift-modal__content {
+        position: relative;
+        padding: 3.4rem 2rem 2.25rem;
+        text-align: center;
+      }
+      .gift-modal__close {
+        position: absolute;
+        top: .8rem;
+        right: .8rem;
+        display: grid;
+        place-items: center;
+        width: 42px;
+        height: 42px;
+        padding: 11px;
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+      }
+      .gift-modal__eyebrow {
+        margin: 0 0 .7rem;
+        color: #9b733d;
+        font-size: .72rem;
+        letter-spacing: .35em;
+      }
+      .gift-modal__label {
+        margin: 1rem 0 .28rem;
+        color: #897765;
+        font-size: .72rem;
+        letter-spacing: .18em;
+        text-transform: uppercase;
+      }
+      .gift-modal__value {
+        margin: 0;
+        font-family: Georgia, serif;
+        font-size: 1.05rem;
+        overflow-wrap: anywhere;
+      }
+      .gift-modal__alias { font-size: 1.2rem; font-weight: 600; letter-spacing: .04em; }
+      .gift-modal__copy {
+        width: 100%;
+        margin-top: 1.8rem;
+        padding: .95rem 1rem;
+        border: 1px solid #a97f46;
+        background: transparent;
+        color: #8f672f;
+        font: 600 .8rem/1 Georgia, serif;
+        letter-spacing: .2em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+      .gift-modal__copy.is-copied { background: #a97f46; color: #fffaf2; }
+      .gift-modal button:focus-visible { outline: 3px solid #a97f46; outline-offset: 3px; }
       .audio-toggle {
         position: fixed;
         right: max(14px, env(safe-area-inset-right));
@@ -725,8 +804,9 @@
         <img src="assets/album-colaborativo-v2.png" alt="Álbum colaborativo. Subí tus fotos y sé parte de nuestra historia. María y Julián, nuestra boda." loading="lazy" />
         <span class="interactive-image-section__button album-section__button" role="link" aria-label="Subir fotos al álbum colaborativo, enlace pendiente" aria-disabled="true">Subir fotos</span>
       </section>
-      <section class="image-section" aria-label="Regalos y datos bancarios">
-        <img src="assets/regalos.png" alt="Regalos. Alias JYM-CASAMIENTO, CBU 070658830004008730089, Banco Galicia." loading="lazy" />
+      <section class="image-section interactive-image-section gifts-section" aria-label="Regalos">
+        <img src="assets/regalos-v2.png" alt="Regalos. Lo más importante es compartir este día con vos. Si deseás hacernos un regalo, podés ayudarnos a seguir construyendo nuestros sueños." loading="lazy" />
+        <button class="gifts-section__button" id="open-gift-modal" type="button" aria-label="Ver datos bancarios"></button>
       </section>
       <section class="image-section interactive-image-section rsvp-section" aria-label="Confirmación de asistencia">
         <img src="assets/confirmar-asistencia.png" alt="Confirmá antes del 15 de diciembre para que podamos reservar tu lugar. Estamos deseando celebrar con vos." loading="lazy" />
@@ -770,6 +850,21 @@
       <button class="gallery-lightbox__nav gallery-lightbox__nav--next" id="gallery-next" type="button" aria-label="Foto siguiente">
         <img class="modal-control-icon" src="assets/icons/chevron-right.svg" alt="" aria-hidden="true" />
       </button>
+    </dialog>
+    <dialog class="gift-modal" id="gift-modal" aria-label="Datos bancarios para regalos">
+      <div class="gift-modal__content">
+        <button class="gift-modal__close" id="gift-modal-close" type="button" aria-label="Cerrar datos bancarios">
+          <img class="modal-control-icon" src="assets/icons/x.svg" alt="" aria-hidden="true" />
+        </button>
+        <p class="gift-modal__eyebrow">DATOS BANCARIOS</p>
+        <p class="gift-modal__label">Alias</p>
+        <p class="gift-modal__value gift-modal__alias" id="gift-alias">JYM-CASAMIENTO</p>
+        <p class="gift-modal__label">CBU</p>
+        <p class="gift-modal__value">070658830004008730089</p>
+        <p class="gift-modal__label">Banco</p>
+        <p class="gift-modal__value">Banco Galicia</p>
+        <button class="gift-modal__copy" id="copy-gift-alias" type="button">Copiar alias</button>
+      </div>
     </dialog>
     <script>
       const weddingDate = new Date('2027-01-09T20:30:00-03:00');
@@ -901,6 +996,35 @@
         if (Math.abs(distance) < 50) return;
         showGalleryImage(galleryIndex + (distance < 0 ? 1 : -1));
       }, { passive: true });
+
+      const giftModal = document.querySelector('#gift-modal');
+      const copyGiftAlias = document.querySelector('#copy-gift-alias');
+      document.querySelector('#open-gift-modal').addEventListener('click', () => giftModal.showModal());
+      document.querySelector('#gift-modal-close').addEventListener('click', () => giftModal.close());
+      giftModal.addEventListener('click', (event) => {
+        if (event.target === giftModal) giftModal.close();
+      });
+      copyGiftAlias.addEventListener('click', async () => {
+        const alias = document.querySelector('#gift-alias').textContent;
+        try {
+          await navigator.clipboard.writeText(alias);
+        } catch {
+          const temporaryInput = document.createElement('textarea');
+          temporaryInput.value = alias;
+          temporaryInput.style.position = 'fixed';
+          temporaryInput.style.opacity = '0';
+          document.body.appendChild(temporaryInput);
+          temporaryInput.select();
+          document.execCommand('copy');
+          temporaryInput.remove();
+        }
+        copyGiftAlias.textContent = 'Alias copiado';
+        copyGiftAlias.classList.add('is-copied');
+        window.setTimeout(() => {
+          copyGiftAlias.textContent = 'Copiar alias';
+          copyGiftAlias.classList.remove('is-copied');
+        }, 2200);
+      });
 
       if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         document.documentElement.classList.add('motion-ready');
